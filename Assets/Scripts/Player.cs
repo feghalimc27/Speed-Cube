@@ -11,6 +11,9 @@ public class Player : MonoBehaviour {
     private Rigidbody2D rb;
     private Collider2D collisionBox;
 
+	[SerializeField]
+	private List<Vector2> velocityList = new List<Vector2>();
+
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -23,37 +26,52 @@ public class Player : MonoBehaviour {
 	}
 
     void FixedUpdate() {
+		LogVelocity();
         DetectCollision();
 
         ApplyMotion();
         ApplyGravity();
     }
 
-    void OnCollisionStay2D(Collision2D col) {
+	void OnCollisionEnter2D(Collision2D col) {
+		if (col.gameObject.layer == 8) {
+			if (col.gameObject.tag == "Wall") {
+				float transferMagnitude = velocityList[1].magnitude;
+
+				rb.velocity = new Vector2(0, transferMagnitude * attributes.friction);
+			}
+		}
+	}
+
+	void OnCollisionStay2D(Collision2D col) {
         // Environmental Collision
         if (col.gameObject.layer == 8) {
             Vector2 relativePosition = col.transform.position - transform.position;
 
-            // If below, ground, return grounded
-            if (Mathf.Sign(relativePosition.y) == -1) {
-                grounded = true;
-            }
-            else if (Mathf.Sign(relativePosition.y) != -1) {
-                grounded = false;
-            }
+			// If below, ground, return grounded
+			if (col.gameObject.tag == "Ground") {
+				if (Mathf.Sign(relativePosition.y) == -1) {
+					grounded = true;
+				}
+				else if (Mathf.Sign(relativePosition.y) != -1) {
+					grounded = false;
+				}
+			}
 
-            // If on the side and not on the ground, on wall; allow walljump
-            if (!grounded && Mathf.Sign(relativePosition.x) == 1) {
-                onWall = true;
-                direction = true;
-            }
-            else if (!grounded && Mathf.Sign(relativePosition.x) == -1) {
-                onWall = true;
-                direction = false;
-            }
-            else {
-                onWall = false;
-            }
+			// If on the side and not on the ground, on wall; allow walljump
+			if (col.gameObject.tag == "Wall") {
+				if (!grounded && Mathf.Sign(relativePosition.x) == 1) {
+					onWall = true;
+					direction = true;
+				}
+				else if (!grounded && Mathf.Sign(relativePosition.x) == -1) {
+					onWall = true;
+					direction = false;
+				}
+				else {
+					onWall = false;
+				}
+			}
         }
     }
 
@@ -61,17 +79,20 @@ public class Player : MonoBehaviour {
         if (col.gameObject.layer == 8) {
             Vector2 relativePosition = col.transform.position - transform.position;
 
-            if (Mathf.Sign(relativePosition.y) == -1) {
-                grounded = false;
-            }
+			if (col.gameObject.tag == "Ground") {
+				if (Mathf.Sign(relativePosition.y) == -1) {
+					grounded = false;
+				}
+			}
 
-
-            if (!grounded && Mathf.Sign(relativePosition.x) == 1) {
-                onWall = false;
-            }
-            else if (!grounded && Mathf.Sign(relativePosition.x) == -1) {
-                onWall = false;
-            }
+			if (col.gameObject.tag == "Wall") {
+				if (!grounded && Mathf.Sign(relativePosition.x) == 1) {
+					onWall = false;
+				}
+				else if (!grounded && Mathf.Sign(relativePosition.x) == -1) {
+					onWall = false;
+				}
+			}
         }
     }
 
@@ -79,8 +100,18 @@ public class Player : MonoBehaviour {
 
     }
 
+	void LogVelocity() {
+		if (velocityList.Count < 2) {
+			velocityList.Add(rb.velocity);
+		}
+		else {
+			velocityList.RemoveAt(0);
+			velocityList.Add(rb.velocity);
+		}
+	}
+
     void ApplyMotion() {
-        if (!direction) {
+		if (!direction && !onWall) {
             if (rb.velocity.x <= attributes.speed) {
                 rb.velocity = new Vector2(rb.velocity.x + attributes.acceleration * Time.deltaTime, rb.velocity.y);
             }
@@ -88,7 +119,7 @@ public class Player : MonoBehaviour {
                 rb.velocity = new Vector2(attributes.speed, rb.velocity.y);
             }
         }
-        else {
+		else if (direction && !onWall) {
             if (rb.velocity.x >= -attributes.speed) {
                 rb.velocity = new Vector2(rb.velocity.x - attributes.acceleration * Time.deltaTime, rb.velocity.y);
             }
@@ -96,7 +127,26 @@ public class Player : MonoBehaviour {
                 rb.velocity = new Vector2(-attributes.speed, rb.velocity.y);
             }
         }
+
+		Jump();
     }
+
+	void Jump() {
+		if (grounded && Input.GetButtonDown("Jump")) {
+			rb.velocity = new Vector2(rb.velocity.x, attributes.jumpStrength);
+		}
+
+		if (onWall && Input.GetButtonDown("Jump")) {
+			switch (direction) {
+				case true:
+					rb.velocity = new Vector2(Mathf.Sin(60 * Mathf.Deg2Rad) * -attributes.jumpStrength, rb.velocity.y + attributes.jumpStrength);
+					break;
+				case false:
+					rb.velocity = new Vector2(Mathf.Sin(60 * Mathf.Deg2Rad) * attributes.jumpStrength, rb.velocity.y + attributes.jumpStrength);
+					break;
+			}
+		}
+	}
 
     void FlipSpeed() {
         rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y);

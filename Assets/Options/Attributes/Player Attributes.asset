@@ -11,8 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d2fbd2b2382724aafda7e11bb49165, type: 3}
   m_Name: Player Attributes
   m_EditorClassIdentifier: 
-  speed: 15
-  acceleration: 3
+  speed: 20
+  acceleration: 6
   friction: 0.78
-  gravity: 15
-  jumpStrength: 25
+  gravity: 25
+  jumpStrength: 10
