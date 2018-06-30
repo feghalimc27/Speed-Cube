@@ -6,10 +6,14 @@ public class Player : MonoBehaviour {
 
     public PlayerAttributes attributes;
 
+	[HideInInspector]
+	public int score = 0;
+
     private bool grounded = false, onWall = false, direction = false;
 
     private Rigidbody2D rb;
     private Collider2D collisionBox;
+	private SpeedMultiplier speedMultiplier;
 
 	[SerializeField]
 	private List<Vector2> velocityList = new List<Vector2>();
@@ -18,11 +22,13 @@ public class Player : MonoBehaviour {
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         collisionBox = GetComponent<Collider2D>();
+		speedMultiplier = GetComponent<SpeedMultiplier>();
+		attributes = Instantiate<PlayerAttributes>(attributes);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        DebugInfo();
+
 	}
 
     void FixedUpdate() {
@@ -31,7 +37,16 @@ public class Player : MonoBehaviour {
 
         ApplyMotion();
         ApplyGravity();
+		IncrementScore();
     }
+
+	void OnTriggerEnter2D(Collider2D col) {
+		if (col.gameObject.tag == "Objective") {
+			CoinCollision();
+
+			Destroy(col.gameObject);
+		}
+	}
 
 	void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.layer == 8) {
@@ -100,6 +115,14 @@ public class Player : MonoBehaviour {
 
     }
 
+	void DebugSpeedIncrease() {
+		if (Input.GetButtonDown("Fire1")) {
+			attributes.speed = speedMultiplier.IncreaseSpeed(attributes);
+			ScaleAdjustment();
+		}
+
+	}
+
 	void LogVelocity() {
 		if (velocityList.Count < 2) {
 			velocityList.Add(rb.velocity);
@@ -162,6 +185,24 @@ public class Player : MonoBehaviour {
 
     }
 
+	void CoinCollision() {
+		score += 5000;
+		attributes.speed = speedMultiplier.IncreaseSpeed(attributes);
+		ScaleAdjustment();
+	}
+
+	void IncrementScore() {
+		score += 10;
+	}
+
+	void ScaleAdjustment() {
+		float scaleFactor = 2.0f - speedMultiplier.speedMultipliter;
+
+		Vector2 spriteScale = transform.localScale;
+
+		transform.localScale = spriteScale * scaleFactor;
+	}
+
     void DebugInfo() {
         Debug.Log("Velocity Vector: " + rb.velocity + " Grounded?: " + grounded);
     }
@@ -173,4 +214,8 @@ public class Player : MonoBehaviour {
     public bool IsOnWall() {
         return onWall;
     }
+
+	public Vector2 GetVelocity() {
+		return rb.velocity;
+	}
 }
