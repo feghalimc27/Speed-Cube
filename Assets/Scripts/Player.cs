@@ -186,7 +186,7 @@ public class Player : MonoBehaviour {
     }
 
 	void CoinCollision() {
-		score += 5000;
+		score += Coin.score;
 		attributes.speed = speedMultiplier.IncreaseSpeed(attributes);
 		ScaleAdjustment();
 	}
