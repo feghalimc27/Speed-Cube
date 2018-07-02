@@ -215,6 +215,10 @@ public class Player : MonoBehaviour {
         return onWall;
     }
 
+    public bool GetDirection() {
+        return direction;
+    }
+
 	public Vector2 GetVelocity() {
 		return rb.velocity;
 	}
