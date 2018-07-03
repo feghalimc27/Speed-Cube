@@ -196,11 +196,28 @@ public class Player : MonoBehaviour {
 	}
 
 	void ScaleAdjustment() {
+		//float scaleFactor = 2.0f - speedMultiplier.speedMultipliter;
+
+		//Vector2 spriteScale = transform.localScale;
+
+		//transform.localScale = spriteScale * scaleFactor;
+
+		StartCoroutine("SmoothScale");
+	}
+
+	IEnumerator SmoothScale() {
 		float scaleFactor = 2.0f - speedMultiplier.speedMultipliter;
 
-		Vector2 spriteScale = transform.localScale;
+		GetComponent<SpriteRenderer>().size *= scaleFactor;
 
-		transform.localScale = spriteScale * scaleFactor;
+		Vector2 finalSize = GetComponent<SpriteRenderer>().size;
+
+		while (transform.localScale.x - Vector2.Lerp(transform.localScale, GetComponent<SpriteRenderer>().size, scaleFactor * 2 * Time.deltaTime).x > 0.0001f) {
+			transform.localScale = Vector2.Lerp(transform.localScale, GetComponent<SpriteRenderer>().size, scaleFactor * 2 * Time.deltaTime);
+			yield return null;
+		}
+
+		StopCoroutine("SmoothScale");
 	}
 
     void DebugInfo() {
