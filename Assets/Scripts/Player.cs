@@ -64,6 +64,8 @@ public class Player : MonoBehaviour {
 				rb.velocity = new Vector2(0, transferMagnitude * attributes.friction);
 			}
 		}
+
+		Debug.Log(col.transform.position - transform.position);
 	}
 
 	void OnCollisionStay2D(Collision2D col) {

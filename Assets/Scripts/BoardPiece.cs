@@ -12,11 +12,16 @@ public class BoardPiece : MonoBehaviour {
 
 	private void OnBecameVisible() {
 		seen = true;
+		CancelInvoke();
 	}
 
 	private void OnBecameInvisible() {
 		if (seen) {
-			Destroy(gameObject);
+			Invoke("Destroy", 2f);
 		}
+	}
+
+	void Destroy() {
+		Destroy(gameObject);
 	}
 }

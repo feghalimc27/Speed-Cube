@@ -13,6 +13,8 @@ public class PathGenerator : MonoBehaviour {
 	private Coroutine building = null;
 
 	private Vector2 buildPoint;
+	[SerializeField]
+	private Vector2 wallOffset = new Vector2(-5, 5);
 
 	private GameObject lastPart = null;
 
@@ -27,7 +29,24 @@ public class PathGenerator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (building == null && board.Length < maxRenderSize) {
-			building = StartCoroutine("BuildGround");
+			if (lastPart) {
+				if (partNumber < 3 || lastPart.GetComponent<BoardPiece>().type == BoardPiece.PieceType.wall) {
+					building = StartCoroutine("BuildGround");
+				}
+				else {
+					int choose = Random.Range(0, 10);
+
+					if (choose >= 8) {
+						building = StartCoroutine("BuildWall");
+					}
+					else {
+						building = StartCoroutine("BuildGround");
+					}
+				}
+			}
+			else {
+				building = StartCoroutine("BuildGround");
+			}
 		}
 		else {
 
@@ -40,9 +59,12 @@ public class PathGenerator : MonoBehaviour {
 		int holeChance = 0;
 		bool holes = false;
         bool coined = false;
+		bool lastWall = false;
 		Color color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
 
 		if (lastPart) {
+			lastWall = lastPart.tag == "Wall";
+
 			if (lastPart.GetComponent<BoardPiece>().type != BoardPiece.PieceType.ground) {
 				lastPart = CreateParentPiece();
 				lastPart.GetComponent<BoardPiece>().type = BoardPiece.PieceType.ground;
@@ -59,7 +81,7 @@ public class PathGenerator : MonoBehaviour {
 
 		partNumber++;
 
-		if (partNumber > 10) {
+		if (partNumber > 10 && !lastWall) {
 			holeChance = Random.Range(0, partNumber);
 
 			if (holeChance > 7) {
@@ -91,6 +113,75 @@ public class PathGenerator : MonoBehaviour {
             }
 
 			buildPoint.x++;
+			yield return null;
+		}
+
+		StopCoroutine(building);
+		building = null;
+	}
+
+	IEnumerator BuildWall() {
+		int length = Random.Range(50, 100);
+		Color color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
+
+		buildPoint.y++;
+
+		Vector2 wallPoint = buildPoint + wallOffset;
+
+
+		GameObject newPart = CreateParentPiece();
+		newPart.GetComponent<BoardPiece>().type = BoardPiece.PieceType.wall;
+		newPart.transform.position = wallPoint;
+		newPart.tag = "Wall";
+		newPart.layer = 8;
+		newPart.name = "Wall " + (partNumber + 1);
+
+		if (lastPart) {
+			if (lastPart.GetComponent<BoardPiece>().type != BoardPiece.PieceType.wall) {
+				lastPart = CreateParentPiece();
+				lastPart.GetComponent<BoardPiece>().type = BoardPiece.PieceType.wall;
+				lastPart.tag = "Wall";
+				lastPart.layer = 8;
+				lastPart.name = "Wall " + (partNumber);
+			}
+		}
+		else {
+			lastPart = CreateParentPiece();
+			lastPart.GetComponent<BoardPiece>().type = BoardPiece.PieceType.wall;
+			lastPart.tag = "Wall";
+			lastPart.layer = 8;
+			lastPart.name = "Wall " + (partNumber);
+		}
+
+		partNumber++;
+
+		for (int i = 0; i < length; ++i) {
+			var block = Instantiate(wall);
+			block.GetComponent<SpriteRenderer>().color = color;
+			block.transform.position = buildPoint;
+			block.name = "Block @" + block.transform.position + " " + i;
+			block.transform.SetParent(lastPart.transform);
+			var oppositeBlock = Instantiate(wall);
+			oppositeBlock.GetComponent<SpriteRenderer>().color = color;
+			oppositeBlock.transform.position = wallPoint;
+			oppositeBlock.name = "Block @" + oppositeBlock.transform.position + " " + i;
+			oppositeBlock.transform.SetParent(newPart.transform);
+
+			buildPoint.y++;
+			wallPoint.y++;
+			yield return null;
+		}
+
+		GameObject roof = CreateParentPiece();
+
+		for (int i = 0; i < 10; ++i) {
+			var block = Instantiate(ground);
+			block.GetComponent<SpriteRenderer>().color = color;
+			block.transform.position = wallPoint;
+			block.name = "Block @" + block.transform.position + " " + i;
+			block.transform.SetParent(roof.transform);
+
+			wallPoint.x++;
 			yield return null;
 		}
 

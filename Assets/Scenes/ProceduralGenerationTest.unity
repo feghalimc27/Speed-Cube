@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75bf800bc11f9c44a32e3f85a64ce28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampening: 0.2
+  dampening: 0.17
   offset: 5
   target: {fileID: 1956310503}
 --- !u!1 &271152887
@@ -240,6 +240,7 @@ MonoBehaviour:
   wall: {fileID: 1394272303437732, guid: 10ddd4cd14912436693c4016b39ddbf1, type: 2}
   coin: {fileID: 1551152975125858, guid: 32bcb7e522ec04a49bf4be0546a815ae, type: 2}
   maxRenderSize: 150
+  wallOffset: {x: -5, y: 5}
 --- !u!4 &271152889
 Transform:
   m_ObjectHideFlags: 0
