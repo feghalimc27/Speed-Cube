@@ -8,14 +8,14 @@ public class PauseMenuController : MonoBehaviour {
 
     public static bool paused = false;
 
-    public GameObject pausePanel, debugPanel, gamePanel;
+    public GameObject pausePanel, debugPanel, gamePanel, gameOverPanel;
 
-    private bool debug = true;
+    private bool debug = false;
 
     void OnEnable() {
         Time.timeScale = 1f;
     }
-	
+
 	// Update is called once per frame
 	void Update () {
         OnEscapeKeyPress();
@@ -35,6 +35,19 @@ public class PauseMenuController : MonoBehaviour {
     public void RestartLevel() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+	public void GameOver() {
+		gamePanel.SetActive(false);
+		gameOverPanel.SetActive(true);
+
+		Text[] gameOverObjects = gameOverPanel.GetComponentsInChildren<Text>();
+
+		foreach (var text in gameOverObjects) {
+			if (text.text.Contains("SCORE: ")) {
+				text.text = "SCORE: " + FindObjectOfType<Player>().score;
+			}
+		}
+	}
 
     public void ToggleDebug() {
         if (debug) {

@@ -9,11 +9,16 @@ public class Coin : MonoBehaviour {
 
     private void OnBecameVisible() {
         seen = true;
+		CancelInvoke();
     }
 
     private void OnBecameInvisible() {
         if (seen) {
-            Destroy(gameObject);
+			Invoke("Destroy", 2);
         }
     }
+
+	void Destroy() {
+		Destroy(gameObject);
+	}
 }

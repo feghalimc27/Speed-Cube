@@ -5,6 +5,7 @@ using UnityEngine;
 public class PathGenerator : MonoBehaviour {
 
     public GameObject ground, wall, coin;
+	public PhysicsMaterial2D groundMaterial;
 	public int maxRenderSize = 150;
 
     private BoardPiece[] board;
@@ -60,7 +61,7 @@ public class PathGenerator : MonoBehaviour {
 		bool holes = false;
         bool coined = false;
 		bool lastWall = false;
-		Color color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
+		Color color = new Color(Random.Range(0.300f, 1.000f), Random.Range(0.300f, 1.000f), Random.Range(0.300f, 1.000f));
 
 		if (lastPart) {
 			lastWall = lastPart.tag == "Wall";
@@ -103,7 +104,7 @@ public class PathGenerator : MonoBehaviour {
 
             int coinChance = Random.Range(0, 1000);
 
-            if (coinChance >= 996 && !coined && partNumber > 2) {
+            if (coinChance >= 990 && !coined && partNumber > 2) {
                 var newCoin = Instantiate(coin);
                 newCoin.transform.position = buildPoint + new Vector2(0, 2);
                 newCoin.transform.localScale *= 0.5f;
@@ -201,6 +202,7 @@ public class PathGenerator : MonoBehaviour {
 		part.AddComponent<BoardPiece>();
 		part.AddComponent<CompositeCollider2D>();
 		part.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+		part.GetComponent<Rigidbody2D>().sharedMaterial = groundMaterial;
 		part.transform.position = buildPoint;
 		part.transform.parent = transform;
 		part.name = "Part " + partNumber;

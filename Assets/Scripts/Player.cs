@@ -9,9 +9,12 @@ public class Player : MonoBehaviour {
 	[HideInInspector]
 	public int score = 0;
 
+	[SerializeField]
+	private int scoreIncrement = 10;
+
 	public float terminalVelocity = 80;
 
-    private bool grounded = false, onWall = false, direction = false;
+	private bool grounded = false, onWall = false, direction = false, scoring = true;
 
     private Rigidbody2D rb;
     private Collider2D collisionBox;
@@ -35,7 +38,8 @@ public class Player : MonoBehaviour {
 
 	void KillOnFreeFall() {
 		if (rb.velocity.y < -terminalVelocity) {
-			FindObjectOfType<PauseMenuController>().RestartLevel();
+			scoring = false;
+			FindObjectOfType<PauseMenuController>().GameOver();
 		}
 	}
 
@@ -59,9 +63,20 @@ public class Player : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.layer == 8) {
 			if (col.gameObject.tag == "Wall") {
+				Vector2 relativePosition = col.transform.position - transform.position;
 				float transferMagnitude = velocityList[1].magnitude;
 
 				rb.velocity = new Vector2(0, transferMagnitude * attributes.friction);
+				// If collision is on the side on wall, stop moving in x
+				if (Mathf.Abs(Mathf.Sign(relativePosition.x)) == 1) {
+					onWall = true;
+				}
+			}
+			if (col.gameObject.tag == "Ground") {
+				Vector2 relativePosition = col.transform.position - transform.position;
+				if (Mathf.Sign(relativePosition.y) == -1) {
+					grounded = true;
+				}
 			}
 		}
 	}
@@ -199,12 +214,15 @@ public class Player : MonoBehaviour {
 
 	void CoinCollision() {
 		score += Coin.score;
+		scoreIncrement += 1;
 		attributes.speed = speedMultiplier.IncreaseSpeed(attributes);
 		ScaleAdjustment();
 	}
 
 	void IncrementScore() {
-		score += 10;
+		if (scoring) {
+			score += scoreIncrement;
+		}
 	}
 
 	void ScaleAdjustment() {
