@@ -13,7 +13,7 @@ public class CameraFollow : MonoBehaviour {
     void Update() {
         Vector3 targetPosition;
         if (target.GetComponent<Player>().GetDirection()) {
-            targetPosition = target.position - new Vector3(offset, 0, 0);
+            targetPosition = target.position + new Vector3(1, 0, 0);
         }
         else {
             targetPosition = target.position + new Vector3(offset, 0, 0);

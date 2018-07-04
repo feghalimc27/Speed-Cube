@@ -64,8 +64,6 @@ public class Player : MonoBehaviour {
 				rb.velocity = new Vector2(0, transferMagnitude * attributes.friction);
 			}
 		}
-
-		Debug.Log(col.transform.position - transform.position);
 	}
 
 	void OnCollisionStay2D(Collision2D col) {
@@ -170,6 +168,10 @@ public class Player : MonoBehaviour {
 		}
 
 		if (onWall && Input.GetButtonDown("Jump")) {
+            if (rb.velocity.y < 0) {
+                rb.velocity = new Vector2(0, 0);
+            }
+
 			switch (direction) {
 				case true:
 					rb.velocity = new Vector2(Mathf.Sin(60 * Mathf.Deg2Rad) * -attributes.jumpStrength, rb.velocity.y + attributes.jumpStrength);
