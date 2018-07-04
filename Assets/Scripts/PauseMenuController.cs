@@ -36,6 +36,10 @@ public class PauseMenuController : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+	public void QuitToMenu() {
+		SceneManager.LoadScene(0);
+	}
+
 	public void GameOver() {
 		gamePanel.SetActive(false);
 		gameOverPanel.SetActive(true);

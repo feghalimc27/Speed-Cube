@@ -424,35 +424,6 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 419465405}
-    - target: {fileID: 1685084307456220, guid: 0e10365ec6041486eac9e123058bcd05, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224644373970302550, guid: 0e10365ec6041486eac9e123058bcd05,
-        type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224644373970302550, guid: 0e10365ec6041486eac9e123058bcd05,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224644373970302550, guid: 0e10365ec6041486eac9e123058bcd05,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -200
-      objectReference: {fileID: 0}
-    - target: {fileID: 224644373970302550, guid: 0e10365ec6041486eac9e123058bcd05,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 150
-      objectReference: {fileID: 0}
-    - target: {fileID: 224425109729614152, guid: 0e10365ec6041486eac9e123058bcd05,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: 80
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0e10365ec6041486eac9e123058bcd05, type: 2}
   m_IsPrefabParent: 0
