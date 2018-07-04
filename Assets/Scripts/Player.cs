@@ -9,6 +9,8 @@ public class Player : MonoBehaviour {
 	[HideInInspector]
 	public int score = 0;
 
+	public float terminalVelocity = 80;
+
     private bool grounded = false, onWall = false, direction = false;
 
     private Rigidbody2D rb;
@@ -28,7 +30,13 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		KillOnFreeFall();
+	}
 
+	void KillOnFreeFall() {
+		if (rb.velocity.y < -terminalVelocity) {
+			FindObjectOfType<PauseMenuController>().RestartLevel();
+		}
 	}
 
     void FixedUpdate() {

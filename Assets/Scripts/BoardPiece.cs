@@ -7,4 +7,17 @@ public class BoardPiece : MonoBehaviour {
     public enum PieceType { wall, ground }
 
     public PieceType type;
+
+	public bool seen = false;
+
+	private void OnBecameVisible() {
+		seen = true;
+	}
+
+	private void OnBecameInvisible() {
+		if (seen) {
+			Debug.Log("Dead");
+			Destroy(gameObject);
+		}
+	}
 }
