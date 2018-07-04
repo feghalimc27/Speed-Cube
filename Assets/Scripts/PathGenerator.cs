@@ -39,6 +39,7 @@ public class PathGenerator : MonoBehaviour {
 		int length = Random.Range(10, 30);
 		int holeChance = 0;
 		bool holes = false;
+        bool coined = false;
 		Color color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
 
 		if (lastPart) {
@@ -77,6 +78,17 @@ public class PathGenerator : MonoBehaviour {
 			block.transform.position = buildPoint;
 			block.name = "Block @" + block.transform.position + " " + i;
 			block.transform.SetParent(lastPart.transform);
+
+            int coinChance = Random.Range(0, 1000);
+
+            if (coinChance >= 996 && !coined && partNumber > 2) {
+                var newCoin = Instantiate(coin);
+                newCoin.transform.position = buildPoint + new Vector2(0, 2);
+                newCoin.name = "Coin @" + newCoin.transform.position + " " + coins.Length + 1;
+                newCoin.transform.SetParent(transform);
+                coined = true;
+            }
+
 			buildPoint.x++;
 			yield return null;
 		}

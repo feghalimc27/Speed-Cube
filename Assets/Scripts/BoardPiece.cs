@@ -16,7 +16,6 @@ public class BoardPiece : MonoBehaviour {
 
 	private void OnBecameInvisible() {
 		if (seen) {
-			Debug.Log("Dead");
 			Destroy(gameObject);
 		}
 	}
