@@ -84,6 +84,7 @@ public class PathGenerator : MonoBehaviour {
             if (coinChance >= 996 && !coined && partNumber > 2) {
                 var newCoin = Instantiate(coin);
                 newCoin.transform.position = buildPoint + new Vector2(0, 2);
+                newCoin.transform.localScale *= 0.5f;
                 newCoin.name = "Coin @" + newCoin.transform.position + " " + coins.Length + 1;
                 newCoin.transform.SetParent(transform);
                 coined = true;
