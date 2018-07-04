@@ -206,7 +206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75bf800bc11f9c44a32e3f85a64ce28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampening: 0.1
+  dampening: 0.2
+  offset: 5
   target: {fileID: 1956310503}
 --- !u!1 &271152887
 GameObject:

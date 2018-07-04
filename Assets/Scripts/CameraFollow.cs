@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
     public float dampening = 0.15f;
+    public float offset = 5;
     public Transform target;
 
     private Vector3 velocity = Vector3.zero;
 
     // Update is called once per frame
     void Update() {
-        Vector3 targetPosition = target.position + new Vector3(5, 0, 0);
+        Vector3 targetPosition;
+        if (target.GetComponent<Player>().GetDirection()) {
+            targetPosition = target.position - new Vector3(offset, 0, 0);
+        }
+        else {
+            targetPosition = target.position + new Vector3(offset, 0, 0);
+        }
 
         if (target) {
             Vector3 point = GetComponent<Camera>().WorldToViewportPoint(targetPosition);
