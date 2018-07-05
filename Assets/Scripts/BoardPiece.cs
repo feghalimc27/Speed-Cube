@@ -10,6 +10,8 @@ public class BoardPiece : MonoBehaviour {
 
 	public bool seen = false;
 
+    public static float killTime = 2f;
+
 	private void OnBecameVisible() {
 		seen = true;
 		CancelInvoke();
@@ -17,7 +19,7 @@ public class BoardPiece : MonoBehaviour {
 
 	private void OnBecameInvisible() {
 		if (seen) {
-			Invoke("Destroy", 2f);
+			Invoke("Destroy", killTime);
 		}
 	}
 

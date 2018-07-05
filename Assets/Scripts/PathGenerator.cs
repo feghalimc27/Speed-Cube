@@ -7,6 +7,7 @@ public class PathGenerator : MonoBehaviour {
     public GameObject ground, wall, coin;
 	public PhysicsMaterial2D groundMaterial;
 	public int maxRenderSize = 150;
+    public int coinAdditive = 4;
 
     private BoardPiece[] board;
     private Coin[] coins;
@@ -111,6 +112,7 @@ public class PathGenerator : MonoBehaviour {
                 newCoin.name = "Coin @" + newCoin.transform.position + " " + coins.Length + 1;
                 newCoin.transform.SetParent(transform);
                 coined = true;
+                length += coinAdditive;
             }
 
 			buildPoint.x++;
