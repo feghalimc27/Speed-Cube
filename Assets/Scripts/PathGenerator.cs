@@ -26,6 +26,7 @@ public class PathGenerator : MonoBehaviour {
 	void Start () {
 		buildPoint = transform.position;
         UpdateBoardContainer();
+		BoardPiece.killTime = 2.0f;
     }
 	
 	// Update is called once per frame
@@ -126,8 +127,6 @@ public class PathGenerator : MonoBehaviour {
 	IEnumerator BuildWall() {
 		int length = Random.Range(50, 100);
 		Color color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
-
-		buildPoint.y++;
 
 		Vector2 wallPoint = buildPoint + wallOffset;
 

@@ -242,7 +242,7 @@ MonoBehaviour:
   groundMaterial: {fileID: 6200000, guid: c15fd42890f7f4bc9ba9d9a5828fc93d, type: 2}
   maxRenderSize: 150
   coinAdditive: 4
-  wallOffset: {x: -5, y: 5}
+  wallOffset: {x: -5, y: 6}
 --- !u!4 &271152889
 Transform:
   m_ObjectHideFlags: 0
