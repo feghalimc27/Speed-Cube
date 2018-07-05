@@ -9,6 +9,8 @@ public class MainMenuController : MonoBehaviour {
 	public Text versionText;
 	public GameObject optionsPanel, mainPanel;
 
+    private bool settings = false;
+
 	void Start() {
 		versionText.text = "SPEED CUBE ALPHA " + Application.version;
 	}
@@ -18,6 +20,15 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	public void SettingsMenu() {
-		
+		if (!settings) {
+            mainPanel.SetActive(false);
+            optionsPanel.SetActive(true);
+            settings = true;
+        }
+        else {
+            mainPanel.SetActive(true);
+            optionsPanel.SetActive(false);
+            settings = false;
+        }
 	}
 }
