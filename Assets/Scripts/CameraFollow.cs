@@ -8,16 +8,14 @@ public class CameraFollow : MonoBehaviour {
     public Transform target;
 
     private Vector3 velocity = Vector3.zero;
+	private Vector3 targetPosition;
+	private bool wallFollow = false;
 
     // Update is called once per frame
     void Update() {
-        Vector3 targetPosition;
-        if (target.GetComponent<Player>().GetDirection()) {
-            targetPosition = target.position + new Vector3(1, 0, 0);
-        }
-        else {
-            targetPosition = target.position + new Vector3(offset, 0, 0);
-        }
+		CalculatePosition();
+
+		WallFollow();
 
         if (target) {
             Vector3 point = GetComponent<Camera>().WorldToViewportPoint(targetPosition);
@@ -26,4 +24,26 @@ public class CameraFollow : MonoBehaviour {
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampening);
         }
     }
+
+	void CalculatePosition() {
+		if (target.GetComponent<Player>().GetDirection()) {
+			targetPosition = target.position + new Vector3(1, 0, 0);
+		}
+		else {
+			targetPosition = target.position + new Vector3(offset, 0, 0);
+		}
+	}
+
+	void WallFollow() {
+		if (target.GetComponent<Player>().IsOnWall() && !wallFollow) {
+			wallFollow = true;
+		}
+		if (wallFollow && target.GetComponent<Player>().IsGrounded()) {
+			wallFollow = false;
+		}
+
+		if (wallFollow) {
+			targetPosition = targetPosition + new Vector3(0, 1, 0);
+		}
+	}
 }

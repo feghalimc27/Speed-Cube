@@ -22,6 +22,8 @@ public class PathGenerator : MonoBehaviour {
 
 	private int partNumber = 0;
 
+	private bool lastCoined = false;
+
 	// Use this for initialization
 	void Start () {
 		buildPoint = transform.position;
@@ -63,7 +65,7 @@ public class PathGenerator : MonoBehaviour {
 		bool holes = false;
         bool coined = false;
 		bool lastWall = false;
-		Color color = new Color(Random.Range(0.300f, 1.000f), Random.Range(0.300f, 1.000f), Random.Range(0.300f, 1.000f));
+		Color color = CreateColor();
 
 		if (lastPart) {
 			lastWall = lastPart.tag == "Wall";
@@ -84,7 +86,7 @@ public class PathGenerator : MonoBehaviour {
 
 		partNumber++;
 
-		if (partNumber > 10 && !lastWall) {
+		if (partNumber > 10 && !lastWall && !lastCoined) {
 			holeChance = Random.Range(0, partNumber);
 
 			if (holeChance > 7) {
@@ -97,7 +99,10 @@ public class PathGenerator : MonoBehaviour {
 				int holeRemoval = Random.Range(4, 9);
 				buildPoint.x += holeRemoval;
 				holes = false;
-			}
+				if (length < 20) {
+					length = 20;
+				}
+ 			}
 			var block = Instantiate(ground);
 			block.GetComponent<SpriteRenderer>().color = color;
 			block.transform.position = buildPoint;
@@ -120,13 +125,15 @@ public class PathGenerator : MonoBehaviour {
 			yield return null;
 		}
 
+		lastCoined = coined;
 		StopCoroutine(building);
 		building = null;
 	}
 
 	IEnumerator BuildWall() {
 		int length = Random.Range(50, 100);
-		Color color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
+		Color color = CreateColor();
+		bool coined = false;
 
 		Vector2 wallPoint = buildPoint + wallOffset;
 
@@ -169,6 +176,18 @@ public class PathGenerator : MonoBehaviour {
 			oppositeBlock.name = "Block @" + oppositeBlock.transform.position + " " + i;
 			oppositeBlock.transform.SetParent(newPart.transform);
 
+			int coinChance = Random.Range(0, 1000);
+
+			if (coinChance >= 990 && !coined && partNumber > 2) {
+				var newCoin = Instantiate(coin);
+				newCoin.transform.position = buildPoint - new Vector2(2.5f, 0);
+				newCoin.transform.localScale *= 0.5f;
+				newCoin.name = "Coin @" + newCoin.transform.position + " " + coins.Length + 1;
+				newCoin.transform.SetParent(transform);
+				coined = true;
+				length += coinAdditive;
+			}
+
 			buildPoint.y++;
 			wallPoint.y++;
 			yield return null;
@@ -196,6 +215,10 @@ public class PathGenerator : MonoBehaviour {
         board = GetComponentsInChildren<BoardPiece>();
         coins = GetComponentsInChildren<Coin>();
     }
+
+	Color CreateColor() {
+		return Color.HSVToRGB(Random.Range(0.000f, 1.000f), 1, 1);
+	}
 
 	GameObject CreateParentPiece() {
 		var part = Instantiate(new GameObject());

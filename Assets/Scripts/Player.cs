@@ -168,12 +168,6 @@ public class Player : MonoBehaviour {
         Debug.DrawRay(transform.position, Vector2.left * edgeLength, Color.red);
         Debug.DrawRay(transform.position, Vector2.right * edgeLength, Color.red);
         Debug.DrawRay(transform.position, Vector2.down * edgeLength, Color.red);
-
-        Debug.Log(grounded + " " + onWall);
-    }
-
-    void OnDrawGizmos() {
-
     }
 
     void DebugSpeedIncrease() {
