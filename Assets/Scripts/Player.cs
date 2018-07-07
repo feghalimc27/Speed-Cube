@@ -139,13 +139,16 @@ public class Player : MonoBehaviour {
     //   }
 
     void DetectCollision() {
-        float edgeLength = collisionBox.bounds.size.x / 2 + 0.1f;
+        float edgeLength = collisionBox.bounds.size.x / 2 + 0.3f;
+
+		Vector2 nextPosition = transform.position + new Vector3(rb.velocity.x * Time.deltaTime, rb.velocity.y * Time.deltaTime, 0);
+		Vector2 boxCastBounds = collisionBox.bounds.size;
+		Vector2 sideBoxBounds = new Vector2(edgeLength, edgeLength);
+
         //RaycastHit2D groundCast = Physics2D.Raycast(transform.position, Vector2.down, edgeLength);
-        RaycastHit2D groundCast = Physics2D.BoxCast(transform.position, new Vector2(edgeLength, edgeLength), 0, Vector2.down, edgeLength);
-        RaycastHit2D wallCastRight = Physics2D.BoxCast(transform.position, new Vector2(edgeLength, edgeLength), 0, Vector2.right, edgeLength);
-        RaycastHit2D wallCastLeft = Physics2D.BoxCast(transform.position, new Vector2(edgeLength, edgeLength), 0, Vector2.left, edgeLength);
-        bool groundCastBool = false;
-        bool wallCastBool = false;
+		RaycastHit2D groundCast = Physics2D.BoxCast(nextPosition, boxCastBounds, 0, Vector2.down, edgeLength);
+		RaycastHit2D wallCastRight = Physics2D.Raycast(nextPosition, Vector2.right, edgeLength);
+		RaycastHit2D wallCastLeft = Physics2D.Raycast(nextPosition, Vector2.left, edgeLength);
 
         if (groundCast) {
             grounded = groundCast.transform.gameObject.tag == "Ground";
@@ -154,12 +157,22 @@ public class Player : MonoBehaviour {
             grounded = false;
         }
         if (wallCastRight) {
+			if (!onWall && wallCastRight.transform.gameObject.tag == "Wall" && !grounded) {
+				float transferMagnitude = velocityList[1].magnitude;
+
+				rb.velocity = new Vector2(rb.velocity.x, transferMagnitude * attributes.friction);
+			}
             onWall = wallCastRight.transform.gameObject.tag == "Wall";
             if (onWall) {
                 direction = true;
             }
         }
         else if (wallCastLeft) {
+			if (!onWall && wallCastLeft.transform.gameObject.tag == "Wall" && !grounded) {
+				float transferMagnitude = velocityList[1].magnitude;
+
+				rb.velocity = new Vector2(rb.velocity.x, transferMagnitude * attributes.friction);
+			}
             onWall = wallCastLeft.transform.gameObject.tag == "Wall";
             if (onWall) {
                 direction = false;
@@ -169,9 +182,9 @@ public class Player : MonoBehaviour {
             onWall = false;
         }
 
-        Debug.DrawRay(transform.position, Vector2.left * edgeLength, Color.red);
-        Debug.DrawRay(transform.position, Vector2.right * edgeLength, Color.red);
-        Debug.DrawRay(transform.position, Vector2.down * edgeLength, Color.red);
+		Debug.DrawRay(nextPosition, Vector2.left * edgeLength, Color.red);
+		Debug.DrawRay(nextPosition, Vector2.right * edgeLength, Color.red);
+		Debug.DrawRay(nextPosition, Vector2.down * edgeLength, Color.red);
     }
 
     void DebugSpeedIncrease() {
@@ -214,11 +227,11 @@ public class Player : MonoBehaviour {
     }
 
 	void Jump() {
-		if (grounded && Input.GetButtonDown("Jump")) {
+		if (Input.GetButtonDown("Jump") && grounded) {
 			rb.velocity = new Vector2(rb.velocity.x, attributes.jumpStrength);
 		}
 
-		if (onWall && Input.GetButtonDown("Jump")) {
+		if (Input.GetButtonDown("Jump") && onWall) {
             if (rb.velocity.y < 0) {
                 rb.velocity = new Vector2(0, 0);
             }
@@ -252,7 +265,9 @@ public class Player : MonoBehaviour {
 		score += Coin.score;
 		scoreIncrement += 1;
 		attributes.speed = speedMultiplier.IncreaseSpeed(attributes);
-        BoardPiece.killTime -= 0.1f;
+		if (BoardPiece.killTime > 1.2f) {
+			BoardPiece.killTime -= 0.1f;
+		}
 		ScaleAdjustment();
 	}
 

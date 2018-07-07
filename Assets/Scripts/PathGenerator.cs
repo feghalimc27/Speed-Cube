@@ -94,13 +94,17 @@ public class PathGenerator : MonoBehaviour {
 			}
 		}
 
+		if (lastWall) {
+			length = 30;
+		}
+
 		for (int i = 0; i < length; ++i) {
 			if (holes) {
 				int holeRemoval = Random.Range(4, 9);
 				buildPoint.x += holeRemoval;
 				holes = false;
-				if (length < 20) {
-					length = 20;
+				if (length < 30) {
+					length = 30;
 				}
  			}
 			var block = Instantiate(ground);

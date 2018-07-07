@@ -21,7 +21,8 @@ public class UIController : MonoBehaviour {
 
 	void DebugTextFormatter() {
 		debugText.text = "Max speed: " + player.GetComponent<Player>().attributes.speed +
-			"\nCurrent Velcoity: " + player.GetComponent<Player>().GetVelocity() + "\nFPS: " + 1 / Time.deltaTime +
-			"\nOn Wall?: " + player.GetComponent<Player>().IsOnWall() + "\nHigh Score: " + LocalData.highScore; 
+			"\nCurrent Velcoity: " + player.GetComponent<Player>().GetVelocity() + "\nFPS: " + 1 / Time.deltaTime + "\nOn Ground?: "
+			+ player.GetComponent<Player>().IsGrounded() + "\nOn Wall?: " + player.GetComponent<Player>().IsOnWall() + "\nHigh Score: " 
+			+ LocalData.highScore; 
 	}
 }
