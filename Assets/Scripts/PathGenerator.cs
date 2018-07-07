@@ -178,9 +178,9 @@ public class PathGenerator : MonoBehaviour {
 
 			int coinChance = Random.Range(0, 1000);
 
-			if (coinChance >= 990 && !coined && partNumber > 2) {
+			if (coinChance >= 990 && !coined && partNumber > 2 && i < length - 5) {
 				var newCoin = Instantiate(coin);
-				newCoin.transform.position = buildPoint - new Vector2(2.5f, 0);
+				newCoin.transform.position = wallPoint + new Vector2(2.5f, 0);
 				newCoin.transform.localScale *= 0.5f;
 				newCoin.name = "Coin @" + newCoin.transform.position + " " + coins.Length + 1;
 				newCoin.transform.SetParent(transform);

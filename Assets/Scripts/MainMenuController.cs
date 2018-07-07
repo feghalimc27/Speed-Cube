@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour {
 	public Scene mainLevel;
-	public Text versionText;
+	public Text versionText, highScoreText;
 	public GameObject optionsPanel, mainPanel;
 
     private bool settings = false;
@@ -23,6 +23,7 @@ public class MainMenuController : MonoBehaviour {
 		if (!settings) {
             mainPanel.SetActive(false);
             optionsPanel.SetActive(true);
+            highScoreText.text = "HIGH SCORE: " + LocalData.highScore;
             settings = true;
         }
         else {
