@@ -40,6 +40,10 @@ public class Player : MonoBehaviour {
 		if (rb.velocity.y < -terminalVelocity) {
 			scoring = false;
 			FindObjectOfType<PauseMenuController>().GameOver();
+			if (score > LocalData.highScore) {
+				LocalData.highScore = score;
+				FindObjectOfType<LocalData>().SaveData();
+			}
 		}
 	}
 
