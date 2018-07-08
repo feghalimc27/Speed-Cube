@@ -9,10 +9,16 @@ public class MainMenuController : MonoBehaviour {
 	public Text versionText, highScoreText, gravityToggleText;
 	public GameObject optionsPanel, mainPanel, debugButton;
 
-    private bool settings = false;
+	private bool settings = false, showGrav = false;
 
 	void Start() {
 		versionText.text = "SPEED CUBE ALPHA " + Application.version;
+		if (Player.gravityMultiplier) {
+			gravityToggleText.text = "GRAV CHANGE: ON";
+		}
+		else {
+			gravityToggleText.text = "GRAV CHANGE: OFF";
+		}
 	}
 
 	void Update() {
@@ -50,8 +56,12 @@ public class MainMenuController : MonoBehaviour {
 	private void DebugToggle() {
 		Touch[] touches = Input.touches;
 
-		if (touches.Length == 2 && settings) {
+		if (touches.Length == 2 && settings && !showGrav) {
 			debugButton.SetActive(!debugButton.activeSelf);
+			showGrav = true;
+		}
+		else if (touches.Length != 2) {
+			showGrav = false;
 		}
 	}
 }
