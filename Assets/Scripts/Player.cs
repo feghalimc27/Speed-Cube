@@ -14,6 +14,8 @@ public class Player : MonoBehaviour {
 
 	public float terminalVelocity = 80;
 
+	public static bool gravityMultiplier = false;
+
 	private bool grounded = false, onWall = false, direction = false, scoring = true;
 
     private Rigidbody2D rb;
@@ -265,6 +267,9 @@ public class Player : MonoBehaviour {
 		score += Coin.score;
 		scoreIncrement += 1;
 		attributes.speed = speedMultiplier.IncreaseSpeed(attributes);
+		if (gravityMultiplier) {
+			attributes.gravity = speedMultiplier.IncreaseGravity(attributes);
+		}
 		if (BoardPiece.killTime > 1.2f) {
 			BoardPiece.killTime -= 0.1f;
 		}
@@ -278,12 +283,6 @@ public class Player : MonoBehaviour {
 	}
 
 	void ScaleAdjustment() {
-		//float scaleFactor = 2.0f - speedMultiplier.speedMultipliter;
-
-		//Vector2 spriteScale = transform.localScale;
-
-		//transform.localScale = spriteScale * scaleFactor;
-
 		StartCoroutine("SmoothScale");
 	}
 

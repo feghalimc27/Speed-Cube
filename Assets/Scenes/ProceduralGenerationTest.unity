@@ -241,8 +241,12 @@ MonoBehaviour:
   wall: {fileID: 1394272303437732, guid: 10ddd4cd14912436693c4016b39ddbf1, type: 2}
   coin: {fileID: 1551152975125858, guid: 32bcb7e522ec04a49bf4be0546a815ae, type: 2}
   groundMaterial: {fileID: 6200000, guid: c15fd42890f7f4bc9ba9d9a5828fc93d, type: 2}
-  maxRenderSize: 150
+  maxRenderSize: 200
   coinAdditive: 4
+  minGroundLength: 20
+  maxGroundLength: 40
+  minWallLength: 40
+  maxWallLength: 90
   wallOffset: {x: -5, y: 6}
 --- !u!4 &271152889
 Transform:

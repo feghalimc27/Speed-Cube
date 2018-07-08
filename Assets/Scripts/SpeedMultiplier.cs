@@ -10,4 +10,8 @@ public class SpeedMultiplier : MonoBehaviour {
 
 		return attributes.speed * speedMultipliter;
 	}
+
+	public float IncreaseGravity(PlayerAttributes attributes) {
+		return attributes.gravity * speedMultipliter;
+	}
 }

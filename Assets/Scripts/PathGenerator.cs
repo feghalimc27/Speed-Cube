@@ -9,6 +9,13 @@ public class PathGenerator : MonoBehaviour {
 	public int maxRenderSize = 150;
     public int coinAdditive = 4;
 
+	public int minGroundLength = 20;
+	public int maxGroundLength = 40;
+	public int minWallLength = 40;
+	public int maxWallLength = 90;
+	public int minHoleSize = 4;
+	public int maxHoleSize = 7;
+
     private BoardPiece[] board;
     private Coin[] coins;
 
@@ -60,7 +67,7 @@ public class PathGenerator : MonoBehaviour {
 	}
 
 	IEnumerator BuildGround() {
-		int length = Random.Range(10, 30);
+		int length = Random.Range(minGroundLength, maxGroundLength);
 		int holeChance = 0;
 		bool holes = false;
         bool coined = false;
@@ -100,7 +107,7 @@ public class PathGenerator : MonoBehaviour {
 
 		for (int i = 0; i < length; ++i) {
 			if (holes) {
-				int holeRemoval = Random.Range(4, 9);
+				int holeRemoval = Random.Range(minHoleSize, maxHoleSize);
 				buildPoint.x += holeRemoval;
 				holes = false;
 				if (length < 30) {
@@ -135,7 +142,7 @@ public class PathGenerator : MonoBehaviour {
 	}
 
 	IEnumerator BuildWall() {
-		int length = Random.Range(50, 100);
+		int length = Random.Range(minWallLength, maxWallLength);
 		Color color = CreateColor();
 		bool coined = false;
 
