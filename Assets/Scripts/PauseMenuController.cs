@@ -9,6 +9,7 @@ public class PauseMenuController : MonoBehaviour {
     public static bool paused = false;
 
     public GameObject pausePanel, debugPanel, gamePanel, gameOverPanel;
+    public Text zoomText;
 
     private bool debug = false;
 
@@ -19,7 +20,12 @@ public class PauseMenuController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         OnEscapeKeyPress();
+        OnZoomChange();
 	}
+
+    void OnZoomChange() {
+        zoomText.text = "ZOOM LEVEL: " + FindObjectOfType<Camera>().orthographicSize;
+    }
 
     void OnEscapeKeyPress() {
         if (Input.GetButtonDown("Cancel")) {

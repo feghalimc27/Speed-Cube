@@ -65,7 +65,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &61246759101020912
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -135,6 +135,7 @@ MonoBehaviour:
   attributes: {fileID: 11400000, guid: ba242e7cc6363c543914005d01cbaddd, type: 2}
   score: 0
   scoreIncrement: 10
+  inputBufferLength: 7
   terminalVelocity: 30
   velocityList: []
 --- !u!114 &114456566727100832

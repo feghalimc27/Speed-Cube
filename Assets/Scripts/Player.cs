@@ -9,14 +9,15 @@ public class Player : MonoBehaviour {
 	[HideInInspector]
 	public int score = 0;
 
-	[SerializeField]
-	private int scoreIncrement = 10;
+    [SerializeField]
+    private int scoreIncrement = 10, inputBufferLength = 3;
+    private int bufferFrameCounter = 0;
 
 	public float terminalVelocity = 80;
 
 	public static bool gravityMultiplier = false;
 
-	private bool grounded = false, onWall = false, direction = false, scoring = true;
+	private bool grounded = false, onWall = false, direction = false, scoring = true, jumping = false;
 
     private Rigidbody2D rb;
     private Collider2D collisionBox;
@@ -52,8 +53,10 @@ public class Player : MonoBehaviour {
     void FixedUpdate() {
 		LogVelocity();
         DetectCollision();
+        InputBuffer();
 
         ApplyMotion();
+        Jump();
         ApplyGravity();
 		IncrementScore();
     }
@@ -223,17 +226,40 @@ public class Player : MonoBehaviour {
             else {
                 rb.velocity = new Vector2(-attributes.speed, rb.velocity.y);
             }
-        } 
+        }
+    }
 
-		Jump();
+    void InputBuffer() {
+        bool touched = false;
+
+        if (Input.touches.Length > 0) {
+            touched = Input.GetTouch(0).phase == TouchPhase.Began;
+        }
+
+        
+        if (!jumping && Input.GetButtonDown("Jump") || touched) {
+            bufferFrameCounter = inputBufferLength;
+        }
+
+        Debug.Log(bufferFrameCounter + " " + jumping);
+
+        if (bufferFrameCounter > 0) {
+            bufferFrameCounter -= 1;
+            jumping = true;
+        }
+        else {
+            jumping = false;
+        }
     }
 
 	void Jump() {
-		if (Input.GetButtonDown("Jump") && grounded) {
+		if (jumping && grounded) {
 			rb.velocity = new Vector2(rb.velocity.x, attributes.jumpStrength);
+            jumping = false;
 		}
 
-		if (Input.GetButtonDown("Jump") && onWall) {
+		if (jumping && onWall) {
+            jumping = false;
             if (rb.velocity.y < 0) {
                 rb.velocity = new Vector2(0, 0);
             }
