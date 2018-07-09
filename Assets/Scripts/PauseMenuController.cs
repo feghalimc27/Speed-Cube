@@ -11,11 +11,15 @@ public class PauseMenuController : MonoBehaviour {
     public GameObject pausePanel, debugPanel, gamePanel, gameOverPanel;
     public Text zoomText;
 
-    private bool debug = false;
+    public static bool debug = false;
 
     void OnEnable() {
         Time.timeScale = 1f;
     }
+
+	private void Start() {
+		debugPanel.SetActive(debug);
+	}
 
 	// Update is called once per frame
 	void Update () {
