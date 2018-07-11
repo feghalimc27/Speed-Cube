@@ -166,7 +166,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -279,6 +279,12 @@ GameObject:
   m_PrefabParentObject: {fileID: 1649073999234056, guid: 32076ab624d5e6e47accba56177823f5,
     type: 2}
   m_PrefabInternal: {fileID: 1956310502}
+--- !u!114 &427383104 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114238460718413564, guid: 0e10365ec6041486eac9e123058bcd05,
+    type: 2}
+  m_PrefabInternal: {fileID: 617784391}
+  m_Script: {fileID: 11500000, guid: 74d00ffdd96cb344ea3bede7bab6d152, type: 3}
 --- !u!1001 &617784391
 Prefab:
   m_ObjectHideFlags: 0
@@ -286,6 +292,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114457262218667864, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 224513019664926362, guid: 0e10365ec6041486eac9e123058bcd05,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -414,6 +425,41 @@ Prefab:
     - target: {fileID: 1987392115830916, guid: 0e10365ec6041486eac9e123058bcd05, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114239060665762512, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114457262218667864, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_Value
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114457262218667864, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114457262218667864, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114457262218667864, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 427383104}
+    - target: {fileID: 114457262218667864, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnZoomChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 114457262218667864, guid: 0e10365ec6041486eac9e123058bcd05,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0e10365ec6041486eac9e123058bcd05, type: 2}

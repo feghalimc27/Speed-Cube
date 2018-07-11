@@ -13,6 +13,7 @@ public class MainMenuController : MonoBehaviour {
 
 	void Start() {
 		versionText.text = "SPEED CUBE ALPHA " + Application.version;
+		FindObjectOfType<Camera>().orthographicSize = PauseMenuController.zoomLevel;
 		if (Player.gravityMultiplier) {
 			gravityToggleText.text = "GRAV CHANGE: ON";
 		}

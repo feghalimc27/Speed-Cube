@@ -167,7 +167,7 @@ public class Player : MonoBehaviour {
 
 				rb.velocity = new Vector2(rb.velocity.x, transferMagnitude * attributes.friction);
 			}
-            onWall = wallCastRight.transform.gameObject.tag == "Wall";
+			onWall = wallCastRight.transform.gameObject.tag == "Wall";
             if (onWall) {
                 direction = true;
             }

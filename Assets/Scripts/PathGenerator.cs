@@ -19,6 +19,9 @@ public class PathGenerator : MonoBehaviour {
     private BoardPiece[] board;
     private Coin[] coins;
 
+	private Color color;
+	private float h = 2, s = 1, v = 1;
+
 	private Coroutine building = null;
 
 	private Vector2 buildPoint;
@@ -35,6 +38,7 @@ public class PathGenerator : MonoBehaviour {
 	void Start () {
 		buildPoint = transform.position;
         UpdateBoardContainer();
+		color = CreateColor();
 		BoardPiece.killTime = 2.0f;
     }
 	
@@ -72,7 +76,6 @@ public class PathGenerator : MonoBehaviour {
 		bool holes = false;
         bool coined = false;
 		bool lastWall = false;
-		Color color = CreateColor();
 
 		if (lastPart) {
 			lastWall = lastPart.tag == "Wall";
@@ -114,6 +117,7 @@ public class PathGenerator : MonoBehaviour {
 					length = 30;
 				}
  			}
+			color = CreateColor();
 			var block = Instantiate(ground);
 			block.GetComponent<SpriteRenderer>().color = color;
 			block.transform.position = buildPoint;
@@ -143,7 +147,6 @@ public class PathGenerator : MonoBehaviour {
 
 	IEnumerator BuildWall() {
 		int length = Random.Range(minWallLength, maxWallLength);
-		Color color = CreateColor();
 		bool coined = false;
 
 		Vector2 wallPoint = buildPoint + wallOffset;
@@ -176,6 +179,7 @@ public class PathGenerator : MonoBehaviour {
 		partNumber++;
 
 		for (int i = 0; i < length; ++i) {
+			color = CreateColor();
 			var block = Instantiate(wall);
 			block.GetComponent<SpriteRenderer>().color = color;
 			block.transform.position = buildPoint;
@@ -227,8 +231,26 @@ public class PathGenerator : MonoBehaviour {
         coins = GetComponentsInChildren<Coin>();
     }
 
+	float GetRandomHue() {
+		return Random.Range(0.000f, 1.000f);
+	}
+
+	void IncrementHue() {
+		h += 0.001f;
+
+		if (h >= 1) {
+			h = 0;
+		}
+	}
+
 	Color CreateColor() {
-		return Color.HSVToRGB(Random.Range(0.000f, 1.000f), 1, 1);
+		if (h == 2) {
+			h = GetRandomHue();
+		}
+
+		IncrementHue();
+
+		return Color.HSVToRGB(h, s, v);
 	}
 
 	GameObject CreateParentPiece() {

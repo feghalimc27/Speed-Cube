@@ -10,6 +10,7 @@ public class PauseMenuController : MonoBehaviour {
 
     public GameObject pausePanel, debugPanel, gamePanel, gameOverPanel;
     public Text zoomText;
+	public static float zoomLevel = 6;
 
     public static bool debug = false;
 
@@ -19,16 +20,18 @@ public class PauseMenuController : MonoBehaviour {
 
 	private void Start() {
 		debugPanel.SetActive(debug);
+		FindObjectOfType<Camera>().orthographicSize = zoomLevel;
+		OnZoomChange();
 	}
 
 	// Update is called once per frame
 	void Update () {
         OnEscapeKeyPress();
-        OnZoomChange();
 	}
 
-    void OnZoomChange() {
-        zoomText.text = "ZOOM LEVEL: " + FindObjectOfType<Camera>().orthographicSize;
+    public void OnZoomChange() {
+		zoomLevel = FindObjectOfType<Camera>().orthographicSize;
+		zoomText.text = "ZOOM LEVEL: " + zoomLevel;
     }
 
     void OnEscapeKeyPress() {
