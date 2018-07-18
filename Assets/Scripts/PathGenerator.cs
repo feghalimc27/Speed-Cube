@@ -15,6 +15,7 @@ public class PathGenerator : MonoBehaviour {
 	public int maxWallLength = 90;
 	public int minHoleSize = 4;
 	public int maxHoleSize = 7;
+    public float hueIncrementGap = 0.01f;
 
     private BoardPiece[] board;
     private Coin[] coins;
@@ -210,6 +211,8 @@ public class PathGenerator : MonoBehaviour {
 
 		GameObject roof = CreateParentPiece();
 
+        roof.layer = 8;
+
 		for (int i = 0; i < 10; ++i) {
 			var block = Instantiate(ground);
 			block.GetComponent<SpriteRenderer>().color = color;
@@ -236,7 +239,7 @@ public class PathGenerator : MonoBehaviour {
 	}
 
 	void IncrementHue() {
-		h += 0.001f;
+		h += hueIncrementGap;
 
 		if (h >= 1) {
 			h = 0;

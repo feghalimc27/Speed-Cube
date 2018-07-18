@@ -135,7 +135,7 @@ MonoBehaviour:
   attributes: {fileID: 11400000, guid: ba242e7cc6363c543914005d01cbaddd, type: 2}
   score: 0
   scoreIncrement: 10
-  inputBufferLength: 7
+  inputBufferLength: 5
   terminalVelocity: 30
   velocityList: []
 --- !u!114 &114456566727100832

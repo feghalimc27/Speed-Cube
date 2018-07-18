@@ -36,7 +36,9 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		KillOnFreeFall();
+        DetectCollision();
+        InputBuffer();
+        KillOnFreeFall();
 	}
 
 	void KillOnFreeFall() {
@@ -51,9 +53,7 @@ public class Player : MonoBehaviour {
 	}
 
     void FixedUpdate() {
-		LogVelocity();
-        DetectCollision();
-        InputBuffer();
+        LogVelocity();
 
         ApplyMotion();
         Jump();
@@ -144,10 +144,11 @@ public class Player : MonoBehaviour {
     //   }
 
     void DetectCollision() {
-        float edgeLength = collisionBox.bounds.size.x / 2 + 0.3f;
+        float edgeLength = collisionBox.bounds.size.x / 2 + 0.1f;
 
-		Vector2 nextPosition = transform.position + new Vector3(rb.velocity.x * Time.deltaTime, rb.velocity.y * Time.deltaTime, 0);
-		Vector2 boxCastBounds = collisionBox.bounds.size;
+        //Vector3 velocityVector = new Vector3(rb.velocity.x * Time.deltaTime, rb.velocity.y * Time.deltaTime, 0);
+        Vector2 nextPosition = transform.position; // + velocityVector;
+        Vector2 boxCastBounds = collisionBox.bounds.size;
 		Vector2 sideBoxBounds = new Vector2(edgeLength, edgeLength);
 
         //RaycastHit2D groundCast = Physics2D.Raycast(transform.position, Vector2.down, edgeLength);
@@ -162,7 +163,7 @@ public class Player : MonoBehaviour {
             grounded = false;
         }
         if (wallCastRight) {
-			if (!onWall && wallCastRight.transform.gameObject.tag == "Wall" && !grounded) {
+			if (!onWall && wallCastRight.transform.gameObject.tag == "Wall" && !IsGrounded()) {
 				float transferMagnitude = velocityList[1].magnitude;
 
 				rb.velocity = new Vector2(rb.velocity.x, transferMagnitude * attributes.friction);
@@ -173,7 +174,7 @@ public class Player : MonoBehaviour {
             }
         }
         else if (wallCastLeft) {
-			if (!onWall && wallCastLeft.transform.gameObject.tag == "Wall" && !grounded) {
+			if (!onWall && wallCastLeft.transform.gameObject.tag == "Wall" && !IsGrounded()) {
 				float transferMagnitude = velocityList[1].magnitude;
 
 				rb.velocity = new Vector2(rb.velocity.x, transferMagnitude * attributes.friction);
@@ -241,7 +242,7 @@ public class Player : MonoBehaviour {
             bufferFrameCounter = inputBufferLength;
         }
 
-        Debug.Log(bufferFrameCounter + " " + jumping);
+        // Debug.Log(bufferFrameCounter + " " + jumping);
 
         if (bufferFrameCounter > 0) {
             bufferFrameCounter -= 1;
@@ -253,7 +254,7 @@ public class Player : MonoBehaviour {
     }
 
 	void Jump() {
-		if (jumping && grounded) {
+		if (jumping && IsGrounded()) {
 			rb.velocity = new Vector2(rb.velocity.x, attributes.jumpStrength);
             jumping = false;
 		}
@@ -280,7 +281,7 @@ public class Player : MonoBehaviour {
     }
 
     void ApplyGravity() {
-        if (!grounded) {
+        if (!IsGrounded()) {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - attributes.gravity * Time.deltaTime);
         }
     }
@@ -328,7 +329,7 @@ public class Player : MonoBehaviour {
 	}
 
     void DebugInfo() {
-        Debug.Log("Velocity Vector: " + rb.velocity + " Grounded?: " + grounded);
+        Debug.Log("Velocity Vector: " + rb.velocity + " Grounded?: " + IsGrounded());
     }
 
     public bool IsGrounded() {

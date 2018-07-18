@@ -11,8 +11,7 @@ public class CameraFollow : MonoBehaviour {
 	private Vector3 targetPosition;
 	private bool wallFollow = false;
 
-    // Update is called once per frame
-    void Update() {
+    void FixedUpdate() {
 		CalculatePosition();
 
 		WallFollow();
