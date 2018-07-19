@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Coin : MonoBehaviour {
-    public static int score = 5000;
+    public static int score = 2000;
 
     public bool seen = false;
 

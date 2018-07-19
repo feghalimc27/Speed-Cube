@@ -15,7 +15,7 @@ public class UIController : MonoBehaviour {
 
 	void Update () {
 		versionText.text = "SPEED CUBE ALPHA " + Application.version;
-		scoreText.text = "Score: " + player.GetComponent<Player>().score;
+		scoreText.text = (player.GetComponent<Player>().score).ToString();
 		DebugTextFormatter();
 	}
 
