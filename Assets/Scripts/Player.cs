@@ -43,6 +43,7 @@ public class Player : MonoBehaviour {
         DetectCollision();
         InputBuffer();
         KillOnFreeFall();
+		Jump();
 	}
 
 	void KillOnFreeFall() {
@@ -60,7 +61,7 @@ public class Player : MonoBehaviour {
         LogVelocity();
 
 		ApplyMotion();
-		Jump();
+		//Jump();
 		ApplyGravity();
 		IncrementScore();
     }
@@ -76,80 +77,6 @@ public class Player : MonoBehaviour {
 			Destroy(col.gameObject);
 		}
 	}
-
-    //void OnCollisionEnter2D(Collision2D col) {
-    //    if (col.gameObject.layer == 8) {
-    //        if (col.gameObject.tag == "Wall") {
-    //            Vector2 relativePosition = col.transform.position - transform.position;
-    //            float transferMagnitude = velocityList[1].magnitude;
-
-    //            rb.velocity = new Vector2(0, transferMagnitude * attributes.friction);
-    //            // If collision is on the side on wall, stop moving in x
-    //            if (Mathf.Abs(Mathf.Sign(relativePosition.x)) == 1) {
-    //                onWall = true;
-    //            }
-    //        }
-    //        if (col.gameObject.tag == "Ground") {
-    //            Vector2 relativePosition = col.transform.position - transform.position;
-    //            if (Mathf.Sign(relativePosition.y) == -1) {
-    //                grounded = true;
-    //            }
-    //        }
-    //    }
-    //}
-
-    //void OnCollisionStay2D(Collision2D col) {
-      //     // Environmental Collision
-      //     if (col.gameObject.layer == 8) {
-      //         Vector2 relativePosition = col.transform.position - transform.position;
-
-    		//// If below, ground, return grounded
-    		//if (col.gameObject.tag == "Ground") {
-    		//	if (Mathf.Sign(relativePosition.y) == -1) {
-    		//		grounded = true;
-    		//	}
-    		//	else if (Mathf.Sign(relativePosition.y) != -1) {
-    		//		grounded = false;
-    		//	}
-    		//}
-
-    		//// If on the side and not on the ground, on wall; allow walljump
-    		//if (col.gameObject.tag == "Wall") {
-    		//	if (!grounded && Mathf.Sign(relativePosition.x) == 1) {
-    		//		onWall = true;
-    		//		direction = true;
-    		//	}
-    		//	else if (!grounded && Mathf.Sign(relativePosition.x) == -1) {
-    		//		onWall = true;
-    		//		direction = false;
-    		//	}
-    		//	else {
-    		//		onWall = false;
-    		//	}
-    		//}
-      //     }
-      // }
-
-      // void OnCollisionExit2D(Collision2D col) {
-      //     if (col.gameObject.layer == 8) {
-      //         Vector2 relativePosition = col.transform.position - transform.position;
-
-    		//if (col.gameObject.tag == "Ground") {
-    		//	if (Mathf.Sign(relativePosition.y) == -1) {
-    		//		grounded = false;
-    		//	}
-    		//}
-
-    		//if (col.gameObject.tag == "Wall") {
-    		//	if (!grounded && Mathf.Sign(relativePosition.x) == 1) {
-    		//		onWall = false;
-    		//	}
-    		//	else if (!grounded && Mathf.Sign(relativePosition.x) == -1) {
-    		//		onWall = false;
-    		//	}
-    		//}
-       //    }
-       //}
 
     void DetectCollision() {
         float edgeLength = collisionBox.bounds.size.x / 2 + 0.1f;
@@ -269,6 +196,7 @@ public class Player : MonoBehaviour {
 
 		if (jumping && onWall) {
             jumping = false;
+			onWall = false;
             if (rb.velocity.y < 0) {
                 rb.velocity = new Vector2(0, 0);
             }
@@ -302,6 +230,7 @@ public class Player : MonoBehaviour {
 		scoreFloat += Coin.score;
 		scoreIncrement += 2;
 		attributes.speed = speedMultiplier.IncreaseSpeed(attributes);
+		FindObjectOfType<Camera>().GetComponent<CameraFollow>().CalculateSpeedOffset();
 		if (gravityMultiplier) {
 			attributes.gravity = speedMultiplier.IncreaseGravity(attributes);
 		}

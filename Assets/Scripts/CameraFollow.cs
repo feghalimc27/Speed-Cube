@@ -10,8 +10,10 @@ public class CameraFollow : MonoBehaviour {
     private Vector3 velocity = Vector3.zero;
 	private Vector3 targetPosition;
 	private bool wallFollow = false;
+	private float speedOffsetChange = 0f;
 
     void FixedUpdate() {
+		VelocityOffset();
 		CalculatePosition();
 
 		WallFollow();
@@ -29,8 +31,17 @@ public class CameraFollow : MonoBehaviour {
 			targetPosition = target.position + new Vector3(1, 0, 0);
 		}
 		else {
-			targetPosition = target.position + new Vector3(offset, 0, 0);
+			targetPosition = target.position + new Vector3(offset + speedOffsetChange, 0, 0);
 		}
+	}
+
+	public void CalculateSpeedOffset() {
+		float maxSpeed = target.GetComponent<Player>().attributes.speed;
+		offset =  4 + (maxSpeed / 20);
+	}
+
+	void VelocityOffset() {
+		speedOffsetChange = target.GetComponent<Player>().GetVelocity().x / ((offset - 4) * 20);
 	}
 
 	void WallFollow() {
