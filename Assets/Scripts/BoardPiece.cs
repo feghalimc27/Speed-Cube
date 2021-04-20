@@ -12,18 +12,25 @@ public class BoardPiece : MonoBehaviour {
 
     public static float killTime = 2f;
 
+	// Terminate blocks when they are not visible for a certain kill time
 	private void OnBecameVisible() {
 		seen = true;
-		CancelInvoke();
+		StopCoroutine("Destroy");
 	}
 
 	private void OnBecameInvisible() {
 		if (seen) {
-			Invoke("Destroy", killTime);
+			StartCoroutine("Destroy");
 		}
 	}
 
-	void Destroy() {
+	private void OnDestroy() {
+		GetComponentInParent<BoardPiece>().seen = true;
+		GetComponentInParent<PathGenerator>().UpdateBoardContainer();
+	}
+
+	IEnumerator Destroy() {
+		yield return new WaitForSeconds(killTime);
 		Destroy(gameObject);
 	}
 }

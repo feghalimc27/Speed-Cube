@@ -8,6 +8,8 @@ public class PathGenerator : MonoBehaviour {
 	public PhysicsMaterial2D groundMaterial;
 	public int maxRenderSize = 150;
     public int coinAdditive = 4;
+	[Range(1, 10), Tooltip("Lower is more frequent, likelyhood out of 10")]
+	public int wallFrequency = 8;
 
 	public int minGroundLength = 20;
 	public int maxGroundLength = 40;
@@ -41,6 +43,9 @@ public class PathGenerator : MonoBehaviour {
         UpdateBoardContainer();
 		color = CreateColor();
 		BoardPiece.killTime = 2.0f;
+
+		//somehow makes framerate worse?
+		// Application.targetFrameRate = 60;
     }
 	
 	// Update is called once per frame
@@ -53,22 +58,25 @@ public class PathGenerator : MonoBehaviour {
 				else {
 					int choose = Random.Range(0, 10);
 
-					if (choose >= 8) {
+					if (choose >= wallFrequency) {
 						building = StartCoroutine("BuildWall");
+						UpdateBoardContainer();
 					}
 					else {
 						building = StartCoroutine("BuildGround");
+						UpdateBoardContainer();
 					}
 				}
 			}
 			else {
 				building = StartCoroutine("BuildGround");
+				UpdateBoardContainer();
 			}
 		}
 		else {
 
 		}
-        UpdateBoardContainer();
+		Debug.Log(board.Length);
 	}
 
 	IEnumerator BuildGround() {
@@ -117,7 +125,8 @@ public class PathGenerator : MonoBehaviour {
 				if (length < 30) {
 					length = 30;
 				}
- 			}
+			}
+
 			color = CreateColor();
 			var block = Instantiate(ground);
 			block.GetComponent<SpriteRenderer>().color = color;
@@ -228,7 +237,7 @@ public class PathGenerator : MonoBehaviour {
 		building = null;
 	}
 
-    void UpdateBoardContainer() {
+    public void UpdateBoardContainer() {
         // Call when adding/removing a piece
         board = GetComponentsInChildren<BoardPiece>();
         coins = GetComponentsInChildren<Coin>();
@@ -257,7 +266,7 @@ public class PathGenerator : MonoBehaviour {
 	}
 
 	GameObject CreateParentPiece() {
-		var part = Instantiate(new GameObject());
+		var part = new GameObject();
 
 		part.AddComponent<BoardPiece>();
 		part.AddComponent<CompositeCollider2D>();
